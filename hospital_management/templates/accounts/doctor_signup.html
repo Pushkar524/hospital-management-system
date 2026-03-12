@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Doctor Signup - HMS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>👨‍⚕️ Doctor Signup</h2>
+    <form method="POST">
+        {% csrf_token %}
+
+        {% for field in form %}
+            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {{ field }}
+            {% if field.errors %}
+                <ul class="errorlist">
+                    {% for error in field.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">Create Doctor Account</button>
+    </form>
+    <p class="mt-10">Already have an account? <a href="{% url 'login' %}">Login here</a></p>
+    <p>Are you a patient? <a href="{% url 'patient_signup' %}">Patient Signup</a></p>
+</div>
+{% endblock %}

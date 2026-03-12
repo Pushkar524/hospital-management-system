@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Login - HMS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>🔐 Login</h2>
+    <form method="POST">
+        {% csrf_token %}
+
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" required autofocus>
+
+        <label for="password">Password</label>
+        <input type="password" name="password" id="password" required>
+
+        <button type="submit" class="btn btn-primary">Login</button>
+    </form>
+    <p class="mt-10">Don't have an account?
+        <a href="{% url 'doctor_signup' %}">Doctor Signup</a> |
+        <a href="{% url 'patient_signup' %}">Patient Signup</a>
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,2 @@
+# No extra packages needed for basic handler
+# Add boto3 if using AWS SES for real email sending

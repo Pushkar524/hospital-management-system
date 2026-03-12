@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Patient Dashboard - HMS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>🧑‍🤝‍🧑 Patient Dashboard — Welcome, {{ user.get_full_name|default:user.username }}</h2>
+</div>
+
+<!-- Available Slots -->
+<div class="card">
+    <h3>Available Appointment Slots</h3>
+    {% if available_slots %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for slot in available_slots %}
+                <tr>
+                    <td>Dr. {{ slot.doctor.get_full_name|default:slot.doctor.username }}</td>
+                    <td>{{ slot.date }}</td>
+                    <td>{{ slot.start_time }}</td>
+                    <td>{{ slot.end_time }}</td>
+                    <td>
+                        <form method="POST" action="{% url 'book_slot' slot.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success">Book</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No available slots at the moment. Please check back later.</p>
+    {% endif %}
+</div>
+
+<!-- My Bookings -->
+<div class="card">
+    <h3>My Bookings</h3>
+    {% if my_bookings %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Doctor</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Booked On</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in my_bookings %}
+                <tr>
+                    <td>Dr. {{ booking.doctor.get_full_name|default:booking.doctor.username }}</td>
+                    <td>{{ booking.slot.date }}</td>
+                    <td>{{ booking.slot.start_time }} - {{ booking.slot.end_time }}</td>
+                    <td>{{ booking.created_at|date:"M d, Y H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No bookings yet. Browse available slots above to book an appointment.</p>
+    {% endif %}
+</div>
+{% endblock %}

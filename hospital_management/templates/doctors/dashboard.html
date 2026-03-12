@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Doctor Dashboard - HMS{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>👨‍⚕️ Doctor Dashboard — Welcome, Dr. {{ user.get_full_name|default:user.username }}</h2>
+</div>
+
+<!-- Add Availability Form -->
+<div class="card">
+    <h3>Add Availability Slot</h3>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="form-row">
+            <div class="form-group">
+                <label for="date">Date</label>
+                <input type="date" name="date" id="date" required>
+            </div>
+            <div class="form-group">
+                <label for="start_time">Start Time</label>
+                <input type="time" name="start_time" id="start_time" required>
+            </div>
+            <div class="form-group">
+                <label for="end_time">End Time</label>
+                <input type="time" name="end_time" id="end_time" required>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-success">Add Slot</button>
+    </form>
+</div>
+
+<!-- Availability Slots -->
+<div class="card">
+    <h3>Your Availability Slots</h3>
+    {% if slots %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for slot in slots %}
+                <tr>
+                    <td>{{ slot.date }}</td>
+                    <td>{{ slot.start_time }}</td>
+                    <td>{{ slot.end_time }}</td>
+                    <td>
+                        {% if slot.is_booked %}
+                            <span class="badge badge-booked">Booked</span>
+                        {% else %}
+                            <span class="badge badge-available">Available</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No availability slots added yet.</p>
+    {% endif %}
+</div>
+
+<!-- Bookings -->
+<div class="card">
+    <h3>Your Bookings</h3>
+    {% if bookings %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Patient</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Booked On</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td>{{ booking.patient.get_full_name|default:booking.patient.username }}</td>
+                    <td>{{ booking.slot.date }}</td>
+                    <td>{{ booking.slot.start_time }} - {{ booking.slot.end_time }}</td>
+                    <td>{{ booking.created_at|date:"M d, Y H:i" }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No bookings yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

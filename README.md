@@ -549,17 +549,6 @@ Runs at: `http://localhost:3000`
 
 ---
 
-## 🔑 Key Implementation Notes for Copilot
-
-- Use **`@login_required`** decorator on all dashboard views
-- Use a custom decorator or mixin to check `request.user.role` before granting access
-- The `Booking` model has **two ForeignKeys to the same `User` model** — use `related_name` to avoid clashes (`doctor_bookings`, `patient_bookings`)
-- Always use **`select_related('doctor')`** when querying `Availability` to avoid N+1 queries
-- The `send_notification()` function must **never crash the main app** — wrap in try/except
-- Google Calendar `token.json` is generated on first OAuth login — handle the refresh token flow
-
----
-
 ## 📦 Full Requirements
 
 **`requirements.txt` (Django project)**
